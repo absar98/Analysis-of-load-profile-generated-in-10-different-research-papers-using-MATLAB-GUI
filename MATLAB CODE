@@ -1,0 +1,1278 @@
+function varargout = PGCEP(varargin)
+% PGCEP MATLAB code for PGCEP.fig
+% PGCEP, by itself, creates a new PGCEP or raises the existing
+% singleton*.
+%
+% H = PGCEP returns the handle to a new PGCEP or the handle to
+% the existing singleton*.
+%
+% PGCEP('CALLBACK',hObject,eventData,handles,...) calls the local
+% function named CALLBACK in PGCEP.M with the given input arguments.
+%
+% PGCEP('Property','Value',...) creates a new PGCEP or raises the
+% existing singleton*. Starting from the left, property value pairs are
+% applied to the GUI before PGCEP_OpeningFcn gets called. An
+% unrecognized property name or invalid value makes property application
+% stop. All inputs are passed to PGCEP_OpeningFcn via varargin.
+%
+% *See GUI Options on GUIDE's Tools menu. Choose "GUI allows only one
+% instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+% Edit the above text to modify the response to help PGCEP
+% Last Modified by GUIDE v2.5 22-Jan-2021 18:54:15
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name', mfilename, ...
+'gui_Singleton', gui_Singleton, ...
+'gui_OpeningFcn', @PGCEP_OpeningFcn, ...
+'gui_OutputFcn', @PGCEP_OutputFcn, ...
+'gui_LayoutFcn', [] , ...
+'gui_Callback', []);
+if nargin && ischar(varargin{1})
+gui_State.gui_Callback = str2func(varargin{1});
+end
+if nargout
+[varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+% --- Executes just before PGCEP is made visible.
+function PGCEP_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject handle to figure
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% varargin command line arguments to PGCEP (see VARARGIN)
+% Choose default command line output for PGCEP
+handles.output = hObject;
+% Update handles structure
+guidata(hObject, handles);
+% This sets up the initial plot - only do when we are invisible
+% so window can get raised using PGCEP.
+% UIWAIT makes PGCEP wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+% --- Outputs from this function are returned to the command line.
+function varargout = PGCEP_OutputFcn(hObject, eventdata, handles)
+% varargout cell array for returning output args (see VARARGOUT);
+% hObject handle to figure
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+% --- Executes on button press in pushbutton1.
+function pushbutton1_Callback(hObject, eventdata, handles)
+% hObject handle to pushbutton1 (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+axes(handles.axes1);
+cla;
+popup_sel_index = get(handles.popupmenu1, 'Value');
+switch popup_sel_index
+case 1
+data=[0:1:24];
+a=[190 200 220 180 230 185 230 380 470 420 360 310 460 370 340 385 360 390 490 910 620 730 575 460 240];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(S));
+set(handles.J,'string', num2str(pug));
+case 2
+data=[0:1:24];
+a=[3700 3500 3520 3570 3580 3650 3680 3900 3950 4100 4500 4650 4580 4710 4750 4900 4700 4710 4400 4340 4200 4300 4600 4300 4200];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 200);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 0.75);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+case 3
+data=[0:1:24];
+a=[950 1020 980 970 975 1310 1700 3020 3800 4650 5650 6450 6590 6800 6900 7050 7100 7010 7200 7350 7020 7025 6130 2950 1000];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+case 4
+data=[0:1:24];
+a=[5900
+5100
+4700
+4600
+4750
+6200
+7300
+8700
+8800
+6500
+4900
+4100
+3600
+3000
+3200
+4000
+5150
+7850
+8200
+8250
+8000
+5000
+4750
+5050
+6000];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, MW'])
+title('Generation Power, MW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+case 5
+data=[0:1:24];
+a=[0.38
+0.29
+0.25
+0.3
+0.26
+0.22
+0.21
+0.30
+0.41
+0.37
+0.28
+0.24
+0.14
+0.24
+0.23
+0.22
+0.28
+0.30
+0.39
+0.40
+0.53
+0.51
+0.44
+0.42
+0.41];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+case 6
+data=[0:1:24];
+a=[500
+520
+600
+500
+600
+400
+500
+600
+1500
+3000
+2700
+2900
+3000
+2600
+2800
+2700
+2900
+3000
+1500
+400
+500
+600
+400
+500
+500];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, MW'])
+title('Generation Power, MW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+case 7
+data=[0:1:24];
+a=[0.15
+0.14
+0.15
+0.13
+0.14
+0.15
+0.16
+0.22
+0.30
+0.31
+0.22
+0.23
+0.19
+0.18
+0.20
+0.20
+0.19
+0.17
+0.16
+0.20
+0.31
+0.41
+0.38
+0.30
+0.19];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+case 8
+data=[0:1:24];
+a=[23
+24
+22
+21
+40
+31
+37
+49
+53
+59
+64
+63
+62
+61
+61
+59
+56
+58
+57
+56
+54
+37
+36
+35
+33];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+case 9
+data=[0:1:24];
+a=[11100
+10100
+9700
+9400
+9200
+9300
+9700
+10800
+11900
+12200
+12250
+12200
+12500
+12150
+12100
+12050
+12150
+12200
+12900
+12900
+12300
+11800
+11100
+11000
+11200];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, MW'])
+title('Generation Power, MW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(S));
+set(handles.J,'string', num2str(pug));
+case 10
+data=[0:1:24];
+a=[5
+5
+5
+5
+5
+5
+5
+15
+15
+15
+15
+15
+20
+20
+20
+20
+20
+20
+20
+5
+5
+5
+5
+5
+5];
+S = sum( a );
+plot(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+%%FixedCost
+fc = (peak_load * 300);
+set(handles.G,'string', num2str(fc));
+%%RunningCost
+rc = (S * 1.5);
+set(handles.H,'string', num2str(rc));
+%%TotalCost
+tc = (fc+rc);
+set(handles.I,'string', num2str(tc));
+%%PerUnitgenerated
+pug = ((tc)/(C));
+set(handles.J,'string', num2str(pug));
+guidata(hObject,handles);
+end
+axes(handles.axes2);
+cla;
+popup_sel_index = get(handles.popupmenu1, 'Value');
+switch popup_sel_index
+case 1
+data=[0:1:24];
+a=[190 200 220 180 230 185 230 380 470 420 360 310 460 370 340 385 360 390 490 910 620 730 575 460 240];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 2
+data=[0:1:24];
+a=[3700 3500 3520 3570 3580 3650 3680 3900 3950 4100 4500 4650 4580 4710 4750 4900 4700 4710 4400 4340 4200 4300 4600 4300 4200];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 3
+data=[0:1:24];
+a=[950 1020 980 970 975 1310 1700 3020 3800 4650 5650 6450 6590 6800 6900 7050 7100 7010 7200 7350 7020 7025 6130 2950 1000];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 4
+data=[0:1:24];
+a=[5900
+5100
+4700
+4600
+4750
+6200
+7300
+8700
+8800
+6500
+4900
+4100
+3600
+3000
+3200
+4000
+5150
+7850
+8200
+8250
+8000
+5000
+4750
+5050
+6000];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 5
+data=[0:1:24];
+a=[0.38
+0.29
+0.25
+0.3
+0.26
+0.22
+0.21
+0.30
+0.41
+0.37
+0.28
+0.24
+0.14
+0.24
+0.23
+0.22
+0.28
+0.30
+0.39
+0.40
+0.53
+0.51
+0.44
+0.42
+0.41];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, MW'])
+title('Generation Power, MW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 6
+data=[0:1:24];
+a=[500
+520
+600
+500
+600
+400
+500
+600
+1500
+3000
+2700
+2900
+3000
+2600
+2800
+2700
+2900
+3000
+1500
+400
+500
+600
+400
+500
+500];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 7
+data=[0:1:24];
+a=[0.15
+0.14
+0.15
+0.13
+0.14
+0.15
+0.16
+0.22
+0.30
+0.31
+0.22
+0.23
+0.19
+0.18
+0.20
+0.20
+0.19
+0.17
+0.16
+0.20
+0.31
+0.41
+0.38
+0.30
+0.19];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 8
+data=[0:1:24];
+a=[23
+24
+22
+21
+40
+31
+37
+49
+53
+59
+64
+63
+62
+61
+61
+59
+56
+58
+57
+56
+54
+37
+36
+35
+33];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 9
+data=[0:1:24];
+a=[11100
+10100
+9700
+9400
+9200
+9300
+9700
+10800
+11900
+12200
+12250
+12200
+12500
+12150
+12100
+12050
+12150
+12200
+12900
+12900
+12300
+11800
+11100
+11000
+11200];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, MW'])
+title('Generation Power, MW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+case 10
+data=[0:1:24];
+a=[5
+5
+5
+5
+5
+5
+5
+15
+15
+15
+15
+15
+20
+20
+20
+20
+20
+20
+20
+5
+5
+5
+5
+5
+5];
+S = sum( a );
+stairs(data,a);
+xlabel(['Time, Hr'])
+ylabel(['Power, kW'])
+title('Generation Power, kW versus time, hour')
+guidata(hObject,handles);
+%%ENERGY GENERATED DURING 24HRS
+set(handles.A,'string', num2str(S))
+%%MAX DEMAND
+peak_load=max(a);
+set(handles.B,'string', num2str(peak_load));
+%%LOAD FACTOR
+C = ((S)/(peak_load*24));
+set(handles.C,'string', num2str(C));
+%%BASE LOAD
+DF = min(a);
+set(handles.D,'string', num2str(DF));
+%%AVERAGE_LOAD
+AL = peak_load*C;
+set(handles.E,'string', num2str(AL));
+%%UNITS GENERATED PER ANNUM
+UGPA = (peak_load * C * 8760);
+set(handles.F,'string', num2str(UGPA));
+guidata(hObject,handles);
+end
+% --------------------------------------------------------------------
+function FileMenu_Callback(hObject, eventdata, handles)
+% hObject handle to FileMenu (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% --------------------------------------------------------------------
+function OpenMenuItem_Callback(hObject, eventdata, handles)
+% hObject handle to OpenMenuItem (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+file = uigetfile('*.fig');
+if ~isequal(file, 0)
+open(file);
+end
+% --------------------------------------------------------------------
+function PrintMenuItem_Callback(hObject, eventdata, handles)
+% hObject handle to PrintMenuItem (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+printdlg(handles.figure1)
+% --------------------------------------------------------------------
+function CloseMenuItem_Callback(hObject, eventdata, handles)
+% hObject handle to CloseMenuItem (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+selection = questdlg(['Close ' get(handles.figure1,'Name') '?'],...
+['Close ' get(handles.figure1,'Name') '...'],...
+'Yes','No','Yes');
+if strcmp(selection,'No')
+return;
+end
+delete(handles.figure1)
+% --- Executes on selection change in popupmenu1.
+function popupmenu1_Callback(hObject, eventdata, handles)
+% hObject handle to popupmenu1 (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
+% contents{get(hObject,'Value')} returns selected item from popupmenu1
+% --- Executes during object creation, after setting all properties.
+function popupmenu1_CreateFcn(hObject, eventdata, handles)
+% hObject handle to popupmenu1 (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: popupmenu controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+function A_Callback(hObject, eventdata, handles)
+% hObject handle to A (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of A as text
+% str2double(get(hObject,'String')) returns contents of A as a double
+% --- Executes during object creation, after setting all properties.
+function A_CreateFcn(hObject, eventdata, handles)
+% hObject handle to A (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function B_Callback(hObject, eventdata, handles)
+% hObject handle to B (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of B as text
+% str2double(get(hObject,'String')) returns contents of B as a double
+% --- Executes during object creation, after setting all properties.
+function B_CreateFcn(hObject, eventdata, handles)
+% hObject handle to B (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function C_Callback(hObject, eventdata, handles)
+% hObject handle to C (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of C as text
+% str2double(get(hObject,'String')) returns contents of C as a double
+% --- Executes during object creation, after setting all properties.
+function C_CreateFcn(hObject, eventdata, handles)
+% hObject handle to C (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function D_Callback(hObject, eventdata, handles)
+% hObject handle to D (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of D as text
+% str2double(get(hObject,'String')) returns contents of D as a double
+% --- Executes during object creation, after setting all properties.
+function D_CreateFcn(hObject, eventdata, handles)
+% hObject handle to D (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function E_Callback(hObject, eventdata, handles)
+% hObject handle to E (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of E as text
+% str2double(get(hObject,'String')) returns contents of E as a double
+% --- Executes during object creation, after setting all properties.
+function E_CreateFcn(hObject, eventdata, handles)
+% hObject handle to E (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function F_Callback(hObject, eventdata, handles)
+% hObject handle to F (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of F as text
+% str2double(get(hObject,'String')) returns contents of F as a double
+% --- Executes during object creation, after setting all properties.
+function F_CreateFcn(hObject, eventdata, handles)
+% hObject handle to F (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function G_Callback(hObject, eventdata, handles)
+% hObject handle to G (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of G as text
+% str2double(get(hObject,'String')) returns contents of G as a double
+% --- Executes during object creation, after setting all properties.
+function G_CreateFcn(hObject, eventdata, handles)
+% hObject handle to G (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function edit10_Callback(hObject, eventdata, handles)
+% hObject handle to G (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of G as text
+% str2double(get(hObject,'String')) returns contents of G as a double
+% --- Executes during object creation, after setting all properties.
+function edit10_CreateFcn(hObject, eventdata, handles)
+% hObject handle to G (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function H_Callback(hObject, eventdata, handles)
+% hObject handle to H (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of H as text
+% str2double(get(hObject,'String')) returns contents of H as a double
+% --- Executes during object creation, after setting all properties.
+function H_CreateFcn(hObject, eventdata, handles)
+% hObject handle to H (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function I_Callback(hObject, eventdata, handles)
+% hObject handle to I (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of I as text
+% str2double(get(hObject,'String')) returns contents of I as a double
+% --- Executes during object creation, after setting all properties.
+function I_CreateFcn(hObject, eventdata, handles)
+% hObject handle to I (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
+function J_Callback(hObject, eventdata, handles)
+% hObject handle to J (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of J as text
+% str2double(get(hObject,'String')) returns contents of J as a double
+% --- Executes during object creation, after setting all properties.
+function J_CreateFcn(hObject, eventdata, handles)
+% hObject handle to J (see GCBO)
+% eventdata reserved - to be defined in a future version of MATLAB
+% handles empty - handles not created until after all CreateFcns called
+% Hint: edit controls usually have a white background on Windows.
+% See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+set(hObject,'BackgroundColor','white');
+end
